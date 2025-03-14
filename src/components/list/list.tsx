@@ -8,7 +8,7 @@ export default function List() {
   const data: Place[] = useContext(PlacesContext)
 
   return (
-    <div className="list-container">
+    <div className={styles.container}>
       <ul>
         {data.map((d, idx) => (<li key={idx}>
           <ListItem place={d}></ListItem>

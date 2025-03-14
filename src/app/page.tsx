@@ -5,6 +5,8 @@ import styles from "./page.module.css";
 import dynamic from "next/dynamic";
 import { createContext, useEffect, useState } from "react";
 import List from "@/components/list";
+import SearchBar from "@/components/search";
+import { Filter } from "@/components/filter/filter";
 
 const MapComponent = dynamic(() => import("../components/map"), { ssr: false });
 export const PlacesContext = createContext([]);
@@ -20,7 +22,7 @@ export default function Home() {
     <PlacesContext.Provider value={nearbyPlaces}>
       <div className={styles.page}>
         <div className={styles.container}>
-          <div className={styles.topBar}>This is top</div>
+          <div className={styles.topBar}><div className={styles.filters}><ul><li><Filter></Filter></li><li><Filter></Filter></li></ul></div><SearchBar/></div>
           <div className={styles.content}>
             <div className={styles.mapContainer}>
               <MapComponent></MapComponent>
