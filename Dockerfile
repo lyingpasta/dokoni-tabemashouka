@@ -1,6 +1,10 @@
 # Build Stage
 FROM node:23 AS builder
 
+# Inject API key at compile stage
+ARG PLACES_API_KEY
+ENV PLACES_API_KEY $PLACES_API_KEY
+
 # Set the working directory
 WORKDIR /app
 
@@ -18,6 +22,10 @@ RUN npm run build
 
 # Production Stage
 FROM node:23-slim
+
+# Inject API key at runtime
+ARG PLACES_API_KEY
+ENV PLACES_API_KEY $PLACES_API_KEY
 
 # Set the working directory
 WORKDIR /app

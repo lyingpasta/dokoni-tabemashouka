@@ -1,0 +1,25 @@
+.container {
+  padding: 10px;
+  border-bottom: 1px solid;
+  border-color: #d1d1d1;
+  background-color: #f0f0f0;
+  transition: background-color 0.5s;
+}
+
+.container:hover {
+  background-color: #d9d9d9;
+  cursor: pointer;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.category {
+font-size: 0.9rem
+}
+
+.address {
+font-size: 0.9rem;
+color: #707070
+}
