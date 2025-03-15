@@ -3,9 +3,11 @@ import "leaflet/dist/leaflet.css";
 import { MarkerComponent } from "./marker";
 import { LatLngTuple } from "leaflet";
 
-const center: LatLngTuple = [35.6646782, 139.7378198];
+type MapComponentInput = {
+  center: LatLngTuple
+}
 
-export function MapComponent() {
+export function MapComponent({ center }: MapComponentInput) {
   return (
     <MapContainer
       center={center}

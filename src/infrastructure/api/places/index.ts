@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import { Place } from "@/domain/entities/place";
 
@@ -18,23 +18,38 @@ const fromPlaceToDomain = (place: any): Place => ({
     id: place.categories[0].id,
     name: place.categories[0].name,
   },
-  link: place.link
-})
+  link: place.link,
+});
 
 export async function getNearbyPlaces(
   coordinates: number[],
+  categories: number[],
+  query: string,
   radius: number = 1000,
 ) {
+  console.log("fetching nearby places with params", { coordinates, categories, query, radius })
   try {
-    const res = await fetch(`${placesUrl}?ll=${coordinates.join(",")}&radius=${radius}`, {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: placesApiKey,
+    const url = new URL(placesUrl)
+    url.searchParams.set('ll', coordinates.join(","))
+    url.searchParams.set('radius', radius.toString())
+    url.searchParams.set('categories', categories.join(","))
+    if (query) {
+      url.searchParams.set('query', query)
+    }
+
+    const res = await fetch(
+      url.toString(),
+      {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: placesApiKey,
+        },
       },
-    });
-    const places = await res.json()
-    return places.results.map(fromPlaceToDomain)
+    );
+
+    const places = await res.json();
+    return places.results.map(fromPlaceToDomain);
   } catch (e) {
     console.error(e);
   }

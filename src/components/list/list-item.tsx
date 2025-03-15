@@ -1,8 +1,8 @@
 import { Place } from "@/domain/entities/place";
-import styles from './list-item.module.css'
+import styles from "./list-item.module.css";
 
 interface ListItemProps {
-  place: Place
+  place: Place;
 }
 
 export default function ListItem({ place }: ListItemProps) {
@@ -12,5 +12,5 @@ export default function ListItem({ place }: ListItemProps) {
       <div className={styles.category}>{place.category.name}</div>
       <div className={styles.address}>{place.address}</div>
     </div>
-  )
+  );
 }
