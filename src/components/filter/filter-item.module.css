@@ -25,3 +25,9 @@
   border-color: #e0e0e0;
   color: white;
 }
+
+.toggled:hover {
+  background-color: #eeaa9f;
+  border-color: #e0e0e0;
+  cursor: pointer;
+}

@@ -7,7 +7,7 @@ export type Place = {
   link: string;
 };
 
-type Category = {
+export type Category = {
   id: string;
-  name: string;
+  label: string;
 };

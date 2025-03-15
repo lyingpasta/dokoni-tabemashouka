@@ -1,15 +1,31 @@
-import { GiSushis } from "react-icons/gi";
 import styles from "./filter-item.module.css";
 import { useState } from "react";
 
-export function FilterItem() {
-  const [isToggled, setIsToggled] = useState(false)
+export function FilterItem({
+  children,
+  onFilterToggled,
+  currentValue,
+}: Readonly<{
+  children: React.ReactNode;
+  onFilterToggled: (value: boolean) => void;
+  currentValue: boolean;
+}>) {
+  const [isToggled, setIsToggled] = useState(currentValue);
 
-  const onToggle = () => setIsToggled(!isToggled)
+  const onToggle = () => {
+    const newValue = !isToggled;
+    setIsToggled(newValue);
+    onFilterToggled(newValue);
+  };
 
   return (
-    <div className={!isToggled ? styles.button : [styles.button, styles.toggled].join(" ")} onClick={onToggle}>
-      <GiSushis size="1.4rem"></GiSushis>
+    <div
+      className={
+        !isToggled ? styles.button : [styles.button, styles.toggled].join(" ")
+      }
+      onClick={onToggle}
+    >
+      {children}
     </div>
   );
 }

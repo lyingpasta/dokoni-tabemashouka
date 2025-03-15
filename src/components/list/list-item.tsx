@@ -9,7 +9,7 @@ export default function ListItem({ place }: ListItemProps) {
   return (
     <div className={styles.container}>
       <div className={styles.name}>{place.name}</div>
-      <div className={styles.category}>{place.category.name}</div>
+      <div className={styles.category}>{place.category.label}</div>
       <div className={styles.address}>{place.address}</div>
     </div>
   );

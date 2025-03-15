@@ -1,3 +1,3 @@
 import { FiltersSet } from "./filters-set";
 
-export default FiltersSet
+export default FiltersSet;

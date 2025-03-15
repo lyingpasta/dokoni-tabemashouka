@@ -6,26 +6,53 @@ import dynamic from "next/dynamic";
 import { createContext, useEffect, useMemo, useState } from "react";
 import List from "@/components/list";
 import SearchBar from "@/components/search";
-import { LatLngTuple } from "leaflet";
 import FiltersSet from "@/components/filter";
+import {
+  categories,
+  DINING_AND_DRINKING_CATEGORY_ID,
+} from "@/domain/value-objects/categories";
+import { center } from "@/domain/value-objects/places";
 
-const DINING_AND_DRINKING_CATEGORY_ID = 13000;
-const center: LatLngTuple = [35.6646782, 139.7378198];
 const MapComponent = dynamic(() => import("../components/map"), { ssr: false });
+
 export const PlacesContext = createContext([]);
-export const SearchCriteriaContext = createContext({ query: "", setQuery: (_: any) => {} })
+export const SearchCriteriaContext = createContext({
+  query: "",
+  setQuery: (_: any) => {},
+  searchFilters: categories.map((category) => ({
+    ...category,
+    isActive: false,
+  })),
+  setSearchFilters: (_: any) => {},
+});
 
 export default function Home() {
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState("");
+  const [searchFilters, setSearchFilters] = useState(
+    categories.map((category) => ({ ...category, isActive: false })),
+  );
 
-  const placesContextValue = useMemo(() => nearbyPlaces, [nearbyPlaces])
-  const searchCriteriaContextValue = useMemo(() => ({query, setQuery}), [query, setQuery])
+  const placesContextValue = useMemo(() => nearbyPlaces, [nearbyPlaces]);
+  const searchCriteriaContextValue = useMemo(
+    () => ({ query, searchFilters, setQuery, setSearchFilters }),
+    [query, setQuery, searchFilters, setSearchFilters],
+  );
+
+  const getActiveFilterCategoryIds = (): string[] =>
+    searchFilters
+      .filter((filter) => filter.isActive)
+      .map((filter) => filter.id);
 
   useEffect(() => {
-    getNearbyPlaces([center[0], center[1]], [DINING_AND_DRINKING_CATEGORY_ID], query).then((p) =>
-      setNearbyPlaces(p),
-    );
+    const categoriesToSearch = getActiveFilterCategoryIds();
+    getNearbyPlaces(
+      [center[0], center[1]],
+      categoriesToSearch.length < 1
+        ? [DINING_AND_DRINKING_CATEGORY_ID]
+        : categoriesToSearch,
+      query,
+    ).then((p) => setNearbyPlaces(p));
   }, [searchCriteriaContextValue]);
 
   return (

@@ -4,8 +4,8 @@ import { MarkerComponent } from "./marker";
 import { LatLngTuple } from "leaflet";
 
 type MapComponentInput = {
-  center: LatLngTuple
-}
+  center: LatLngTuple;
+};
 
 export function MapComponent({ center }: MapComponentInput) {
   return (

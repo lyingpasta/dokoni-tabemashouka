@@ -15,41 +15,46 @@ const fromPlaceToDomain = (place: any): Place => ({
   name: place.name,
   address: place.location.formatted_address,
   category: {
-    id: place.categories[0].id,
-    name: place.categories[0].name,
+    // Get last category child -- TODO for filter purpose
+    id: place.categories[place.categories.length - 1].id,
+    label: place.categories[place.categories.length - 1].name,
   },
   link: place.link,
 });
 
 export async function getNearbyPlaces(
   coordinates: number[],
-  categories: number[],
+  categories: string[],
   query: string,
   radius: number = 1000,
 ) {
-  console.log("fetching nearby places with params", { coordinates, categories, query, radius })
+  console.log("fetching nearby places with params", {
+    coordinates,
+    categories,
+    query,
+    radius,
+  });
   try {
-    const url = new URL(placesUrl)
-    url.searchParams.set('ll', coordinates.join(","))
-    url.searchParams.set('radius', radius.toString())
-    url.searchParams.set('categories', categories.join(","))
+    const url = new URL(placesUrl);
+    url.searchParams.set("ll", coordinates.join(","));
+    url.searchParams.set("radius", radius.toString());
+    url.searchParams.set("categories", categories.join(","));
     if (query) {
-      url.searchParams.set('query', query)
+      url.searchParams.set("query", query);
     }
 
-    const res = await fetch(
-      url.toString(),
-      {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: placesApiKey,
-        },
+    const res = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: placesApiKey,
       },
-    );
+    });
 
     const places = await res.json();
-    return places.results.map(fromPlaceToDomain);
+    return places.results.length > 0
+      ? places.results.map(fromPlaceToDomain)
+      : [];
   } catch (e) {
     console.error(e);
   }
