@@ -12,10 +12,16 @@ import {
   DINING_AND_DRINKING_CATEGORY_ID,
 } from "@/domain/value-objects/categories";
 import { center } from "@/domain/value-objects/places";
+import { Place } from "@/domain/entities/place";
+import { LatLngTuple } from "leaflet";
 
 const MapComponent = dynamic(() => import("../components/map"), { ssr: false });
+const MarkerComponent = dynamic(
+  () => import("../components/map").then((mod) => mod.MarkerComponent),
+  { ssr: false },
+);
 
-export const PlacesContext = createContext([]);
+export const PlacesContext = createContext<Place[]>([]);
 export const SearchCriteriaContext = createContext({
   query: "",
   setQuery: (_: any) => {},
@@ -27,7 +33,7 @@ export const SearchCriteriaContext = createContext({
 });
 
 export default function Home() {
-  const [nearbyPlaces, setNearbyPlaces] = useState([]);
+  const [nearbyPlaces, setNearbyPlaces] = useState<Place[]>([]);
   const [query, setQuery] = useState("");
   const [searchFilters, setSearchFilters] = useState(
     categories.map((category) => ({ ...category, isActive: false })),
@@ -52,7 +58,12 @@ export default function Home() {
         ? [DINING_AND_DRINKING_CATEGORY_ID]
         : categoriesToSearch,
       query,
-    ).then((p) => setNearbyPlaces(p));
+    )
+      .then((p) => {
+        console.log(p);
+        return p;
+      })
+      .then((p) => setNearbyPlaces(p));
   }, [searchCriteriaContextValue]);
 
   return (
@@ -67,7 +78,9 @@ export default function Home() {
           </SearchCriteriaContext.Provider>
           <div className={styles.content}>
             <div className={styles.mapContainer}>
-              <MapComponent center={center}></MapComponent>
+              <MapComponent center={center}>
+                {nearbyPlaces.map(makePlaceMarker)}
+              </MapComponent>
             </div>
             <div className={styles.listContainer}>
               <List />
@@ -78,3 +91,9 @@ export default function Home() {
     </PlacesContext.Provider>
   );
 }
+
+const makePlaceMarker = (place: Place) => (
+  <MarkerComponent key={place.id} position={place.coordinates as LatLngTuple}>
+    <div>{place.name}</div>
+  </MarkerComponent>
+);

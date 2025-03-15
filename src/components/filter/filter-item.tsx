@@ -1,15 +1,17 @@
 import styles from "./filter-item.module.css";
 import { useState } from "react";
 
+type FilterItemInput = {
+  children: React.ReactNode;
+  onFilterToggled: (value: boolean) => void;
+  currentValue: boolean;
+};
+
 export function FilterItem({
   children,
   onFilterToggled,
   currentValue,
-}: Readonly<{
-  children: React.ReactNode;
-  onFilterToggled: (value: boolean) => void;
-  currentValue: boolean;
-}>) {
+}: Readonly<FilterItemInput>) {
   const [isToggled, setIsToggled] = useState(currentValue);
 
   const onToggle = () => {

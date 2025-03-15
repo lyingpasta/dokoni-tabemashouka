@@ -5,7 +5,7 @@ export type Place = {
   address: string;
   category: Category;
   link: string;
-  rating: number
+  rating: number;
 };
 
 export type Category = {

@@ -1,13 +1,17 @@
 import { Circle, MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { MarkerComponent } from "./marker";
 import { LatLngTuple } from "leaflet";
+import { SelfPositionMarkerComponent } from "./marker";
 
 type MapComponentInput = {
   center: LatLngTuple;
+  children: React.ReactNode;
 };
 
-export function MapComponent({ center }: MapComponentInput) {
+export function MapComponent({
+  center,
+  children,
+}: Readonly<MapComponentInput>) {
   return (
     <MapContainer
       center={center}
@@ -27,7 +31,10 @@ export function MapComponent({ center }: MapComponentInput) {
         color="#ab5cff"
         opacity={0.6}
       ></Circle>
-      <MarkerComponent></MarkerComponent>
+      <SelfPositionMarkerComponent
+        position={center}
+      ></SelfPositionMarkerComponent>
+      {children}
     </MapContainer>
   );
 }

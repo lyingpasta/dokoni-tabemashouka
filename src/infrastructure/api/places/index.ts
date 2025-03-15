@@ -16,8 +16,8 @@ const requestedFields = [
   "location",
   "categories",
   "link",
-  "rating"
-]
+  "rating",
+];
 
 const fromPlaceToDomain = (place: any): Place => ({
   id: place.fsq_id,
@@ -30,7 +30,7 @@ const fromPlaceToDomain = (place: any): Place => ({
     label: place.categories[place.categories.length - 1].name,
   },
   link: place.link,
-  rating: place.rating
+  rating: place.rating,
 });
 
 export async function getNearbyPlaces(
@@ -38,7 +38,7 @@ export async function getNearbyPlaces(
   categories: string[],
   query: string,
   radius: number = 1000,
-) {
+): Promise<Place[]> {
   console.log("fetching nearby places with params", {
     coordinates,
     categories,
@@ -51,6 +51,7 @@ export async function getNearbyPlaces(
     url.searchParams.set("radius", radius.toString());
     url.searchParams.set("categories", categories.join(","));
     url.searchParams.set("fields", requestedFields.join(","));
+    url.searchParams.set("limit", "50");
     if (query) {
       url.searchParams.set("query", query);
     }
@@ -65,7 +66,9 @@ export async function getNearbyPlaces(
 
     if (res.status !== 200) {
       const reason = await res.json();
-      throw Error(`Error while fetching place ${res.status} ${res.statusText}: ${reason.message}`)
+      throw Error(
+        `Error while fetching place ${res.status} ${res.statusText}: ${reason.message}`,
+      );
     }
 
     const places = await res.json();
@@ -74,5 +77,6 @@ export async function getNearbyPlaces(
       : [];
   } catch (e) {
     console.error(e);
+    throw new Error("Unexpected Error");
   }
 }

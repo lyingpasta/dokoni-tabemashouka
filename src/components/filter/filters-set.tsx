@@ -23,7 +23,7 @@ export function FiltersSet() {
               onFilterToggled={onFilterToggled(filter.id)}
               currentValue={filter.isActive}
             >
-              {<filter.Icon size="1.4rem"></filter.Icon>}
+              {<filter.IconComponent size="1.4rem"></filter.IconComponent>}
             </FilterItem>
           </li>
         ))}
