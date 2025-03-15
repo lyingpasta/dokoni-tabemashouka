@@ -9,6 +9,16 @@ if (!placesApiKey) {
   throw new Error("PLACES_API_KEY environment variable is not set.");
 }
 
+const requestedFields = [
+  "fsq_id",
+  "geocodes",
+  "name",
+  "location",
+  "categories",
+  "link",
+  "rating"
+]
+
 const fromPlaceToDomain = (place: any): Place => ({
   id: place.fsq_id,
   coordinates: [place.geocodes.main.latitude, place.geocodes.main.longitude],
@@ -20,6 +30,7 @@ const fromPlaceToDomain = (place: any): Place => ({
     label: place.categories[place.categories.length - 1].name,
   },
   link: place.link,
+  rating: place.rating
 });
 
 export async function getNearbyPlaces(
@@ -39,6 +50,7 @@ export async function getNearbyPlaces(
     url.searchParams.set("ll", coordinates.join(","));
     url.searchParams.set("radius", radius.toString());
     url.searchParams.set("categories", categories.join(","));
+    url.searchParams.set("fields", requestedFields.join(","));
     if (query) {
       url.searchParams.set("query", query);
     }
@@ -50,6 +62,11 @@ export async function getNearbyPlaces(
         Authorization: placesApiKey,
       },
     });
+
+    if (res.status !== 200) {
+      const reason = await res.json();
+      throw Error(`Error while fetching place ${res.status} ${res.statusText}: ${reason.message}`)
+    }
 
     const places = await res.json();
     return places.results.length > 0

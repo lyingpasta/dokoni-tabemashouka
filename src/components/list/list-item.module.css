@@ -11,6 +11,35 @@
   cursor: pointer;
 }
 
+.header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.rating {
+  background-color: #d9d9d9;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.low {
+  background-color: #bd0000;
+  color: #f7f7f7;
+}
+
+.medium {
+  background-color: #c57731;
+  color: #f7f7f7;
+}
+
+.high{
+  background-color: #58bd00;
+  color: #f7f7f7;
+}
+
 .name {
   font-weight: bold;
 }
