@@ -6,15 +6,17 @@ import { SelfPositionMarkerComponent } from "./marker";
 type MapComponentInput = {
   center: LatLngTuple;
   children: React.ReactNode;
+  focusPoint?: LatLngTuple;
 };
 
 export function MapComponent({
   center,
   children,
+  focusPoint
 }: Readonly<MapComponentInput>) {
   return (
     <MapContainer
-      center={center}
+      center={focusPoint ?? center}
       zoom={15}
       scrollWheelZoom={true}
       style={{ height: "100%" }}

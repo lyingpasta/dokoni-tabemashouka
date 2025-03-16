@@ -16,6 +16,8 @@ import { Place } from "@/domain/entities/place";
 import { LatLngTuple } from "leaflet";
 import { PlacesContext } from "@/infrastructure/context/places-context.provider";
 import { SearchCriteriaContext } from "@/infrastructure/context/seach-criteria-context.provider";
+import PlaceDetails from "@/components/place-details";
+import { SelectedPlaceContext } from "@/infrastructure/context/selected-place-context.provider";
 
 const MapComponent = dynamic(() => import("../components/map"), { ssr: false });
 const MarkerComponent = dynamic(
@@ -25,6 +27,7 @@ const MarkerComponent = dynamic(
 
 export default function Home() {
   const [nearbyPlaces, setNearbyPlaces] = useState<Place[]>([]);
+  const [selectedPlace, setSelectedPlace] = useState<Place | undefined>(undefined);
   const [query, setQuery] = useState("");
   const [searchFilters, setSearchFilters] = useState(
     categories.map((category) => ({ ...category, isActive: false })),
@@ -35,6 +38,7 @@ export default function Home() {
     () => ({ query, searchFilters, setQuery, setSearchFilters }),
     [query, setQuery, searchFilters, setSearchFilters],
   );
+  const selectedPlaceContextValue = useMemo(() => ({ selectedPlace, setSelectedPlace }), [selectedPlace])
 
   const getActiveFilterCategoryIds = useCallback(
     (): string[] =>
@@ -59,22 +63,29 @@ export default function Home() {
     <PlacesContext.Provider value={placesContextValue}>
       <div className={styles.page}>
         <div className={styles.container}>
+
           <SearchCriteriaContext.Provider value={searchCriteriaContextValue}>
             <div className={styles.topBar}>
               <FiltersSet />
               <SearchBar />
             </div>
           </SearchCriteriaContext.Provider>
-          <div className={styles.content}>
-            <div className={styles.mapContainer}>
-              <MapComponent center={center}>
-                {nearbyPlaces.map(makePlaceMarker)}
-              </MapComponent>
+
+          <SelectedPlaceContext.Provider value={selectedPlaceContextValue}>
+            <div className={styles.content}>
+              <div className={styles.mapContainer}>
+                <MapComponent center={center} focusPoint={selectedPlace?.coordinates as LatLngTuple ?? undefined}>
+                  {nearbyPlaces.map(makePlaceMarker)}
+                </MapComponent>
+              </div>
+              <div className={styles.listContainer}>
+                <List />
+              </div>
             </div>
-            <div className={styles.listContainer}>
-              <List />
-            </div>
-          </div>
+
+            <PlaceDetails />
+
+          </SelectedPlaceContext.Provider>
         </div>
       </div>
     </PlacesContext.Provider>
