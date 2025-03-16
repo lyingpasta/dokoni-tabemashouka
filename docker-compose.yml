@@ -7,5 +7,3 @@ services:
     environment:
       - NODE_ENV=production
       - PLACES_API_KEY=$PLACES_API_KEY
-    volumes:
-      - .:/app

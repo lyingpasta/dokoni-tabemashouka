@@ -21,25 +21,23 @@ COPY . .
 RUN npm run build
 
 # Production Stage
-FROM node:23-slim
+FROM node:23-alpine
 
 # Inject API key at runtime
 ARG PLACES_API_KEY
 ENV PLACES_API_KEY $PLACES_API_KEY
 
+# Copy the built application from the builder stage
+COPY --from=builder /app/package.json /app/package.json
+COPY --from=builder /app/.next /app/.next
+COPY --from=builder /app/node_modules /app/node_modules
+COPY --from=builder /app/public /app/public
+
 # Set the working directory
 WORKDIR /app
-
-# Copy the built application from the builder stage
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/.next ./
-
-# Install only production dependencies
-RUN npm install --production
 
 # Expose the port the app runs on
 EXPOSE 3000
 
 # Start the Next.js app
-CMD ["npm", "start"]
-
+CMD ["npx", "next", "start"]
