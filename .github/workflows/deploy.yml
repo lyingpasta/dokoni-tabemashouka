@@ -68,6 +68,6 @@ jobs:
               --network default-proxy \
               --label-file '/home/${{ secrets.VPS_USER }}/dokoni-tabemashouka-app/labels' \
               --env PLACES_API_KEY='${{ secrets.PLACES_API_KEY }}' \
-              -p 6000:3000 \
+              -p 10000:3000 \
               dokoni-tabemashouka-app:latest
             docker system prune -af  # Clean up unused Docker data
