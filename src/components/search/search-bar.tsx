@@ -1,7 +1,7 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import styles from "./search-bar.module.css";
 import { useContext, useState } from "react";
-import { SearchCriteriaContext } from "@/app/page";
+import { SearchCriteriaContext } from "@/infrastructure/context/seach-criteria-context.provider";
 
 export function SearchBar() {
   const { query, setQuery } = useContext(SearchCriteriaContext);

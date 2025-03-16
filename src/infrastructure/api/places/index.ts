@@ -9,6 +9,26 @@ if (!placesApiKey) {
   throw new Error("PLACES_API_KEY environment variable is not set.");
 }
 
+type PlaceAPIResponsePlaceObject = {
+  fsq_id: string;
+  geocodes: {
+    main: {
+      latitude: number;
+      longitude: number;
+    };
+  };
+  name: string;
+  location: {
+    formatted_address: string;
+  };
+  categories: {
+    id: string;
+    name: string;
+  }[];
+  link: string;
+  rating: number;
+};
+
 const requestedFields = [
   "fsq_id",
   "geocodes",
@@ -19,7 +39,7 @@ const requestedFields = [
   "rating",
 ];
 
-const fromPlaceToDomain = (place: any): Place => ({
+const fromPlaceToDomain = (place: PlaceAPIResponsePlaceObject): Place => ({
   id: place.fsq_id,
   coordinates: [place.geocodes.main.latitude, place.geocodes.main.longitude],
   name: place.name,

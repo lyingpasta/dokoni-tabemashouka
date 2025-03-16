@@ -1,7 +1,7 @@
+import { SearchCriteriaContext } from "@/infrastructure/context/seach-criteria-context.provider";
 import { FilterItem } from "./filter-item";
 import styles from "./filters-set.module.css";
 import { useContext } from "react";
-import { SearchCriteriaContext } from "@/app/page";
 
 export function FiltersSet() {
   const { searchFilters, setSearchFilters } = useContext(SearchCriteriaContext);

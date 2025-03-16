@@ -1,10 +1,7 @@
-:root {
+.container {
   --size: 30px;
   --border-radius: 5px;
   --border-color: #606060;
-}
-
-.container {
   display: flex;
   align-items: center;
 }

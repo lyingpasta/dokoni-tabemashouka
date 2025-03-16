@@ -1,8 +1,8 @@
-import { PlacesContext } from "@/app/page";
 import { Place } from "@/domain/entities/place";
 import { useContext } from "react";
 import styles from "./list.module.css";
 import ListItem from "./list-item";
+import { PlacesContext } from "@/infrastructure/context/places-context.provider";
 
 export default function List() {
   const data: Place[] = useContext(PlacesContext);

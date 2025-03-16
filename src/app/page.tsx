@@ -3,7 +3,7 @@
 import { getNearbyPlaces } from "@/infrastructure/api/places";
 import styles from "./page.module.css";
 import dynamic from "next/dynamic";
-import { createContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import List from "@/components/list";
 import SearchBar from "@/components/search";
 import FiltersSet from "@/components/filter";
@@ -14,23 +14,14 @@ import {
 import { center } from "@/domain/value-objects/places";
 import { Place } from "@/domain/entities/place";
 import { LatLngTuple } from "leaflet";
+import { PlacesContext } from "@/infrastructure/context/places-context.provider";
+import { SearchCriteriaContext } from "@/infrastructure/context/seach-criteria-context.provider";
 
 const MapComponent = dynamic(() => import("../components/map"), { ssr: false });
 const MarkerComponent = dynamic(
   () => import("../components/map").then((mod) => mod.MarkerComponent),
   { ssr: false },
 );
-
-export const PlacesContext = createContext<Place[]>([]);
-export const SearchCriteriaContext = createContext({
-  query: "",
-  setQuery: (_: any) => {},
-  searchFilters: categories.map((category) => ({
-    ...category,
-    isActive: false,
-  })),
-  setSearchFilters: (_: any) => {},
-});
 
 export default function Home() {
   const [nearbyPlaces, setNearbyPlaces] = useState<Place[]>([]);
@@ -45,10 +36,13 @@ export default function Home() {
     [query, setQuery, searchFilters, setSearchFilters],
   );
 
-  const getActiveFilterCategoryIds = (): string[] =>
-    searchFilters
-      .filter((filter) => filter.isActive)
-      .map((filter) => filter.id);
+  const getActiveFilterCategoryIds = useCallback(
+    (): string[] =>
+      searchFilters
+        .filter((filter) => filter.isActive)
+        .map((filter) => filter.id),
+    [searchFilters],
+  );
 
   useEffect(() => {
     const categoriesToSearch = getActiveFilterCategoryIds();
@@ -58,13 +52,8 @@ export default function Home() {
         ? [DINING_AND_DRINKING_CATEGORY_ID]
         : categoriesToSearch,
       query,
-    )
-      .then((p) => {
-        console.log(p);
-        return p;
-      })
-      .then((p) => setNearbyPlaces(p));
-  }, [searchCriteriaContextValue]);
+    ).then((res) => setNearbyPlaces(res));
+  }, [query, searchCriteriaContextValue, getActiveFilterCategoryIds]);
 
   return (
     <PlacesContext.Provider value={placesContextValue}>
