@@ -1,14 +1,12 @@
 import { match, P } from "ts-pattern";
-import styles from "./rating.module.css"
+import styles from "./rating.module.css";
 
 type RatingInput = {
-  rate: number
-}
+  rate: number;
+};
 
 export default function Rating({ rate }: RatingInput) {
-  return (<div className={getRatingColor(rate)}>
-    {rate ?? "-"}
-  </div>)
+  return <div className={getRatingColor(rate)}>{rate ?? "-"}</div>;
 }
 
 const getRatingColor = (rate: number) =>

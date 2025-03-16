@@ -9,19 +9,34 @@ interface ListItemProps {
 }
 
 export default function ListItem({ place }: ListItemProps) {
+  const placeId = place.id;
   const [isSelected, setIsSelected] = useState(false);
-  const { selectedPlace, setSelectedPlace } = useContext(SelectedPlaceContext)
+  const { selectedPlace, setSelectedPlace } = useContext(SelectedPlaceContext);
 
   const handleSelection = () => {
     setIsSelected(true);
     setSelectedPlace(place);
-  }
+  };
 
-  const selectedPlaceContextValue = useMemo(() => selectedPlace, [selectedPlace])
-  useEffect(() => { if (selectedPlace?.id !== place.id) { setIsSelected(false) } }, [selectedPlaceContextValue])
+  const selectedPlaceContextValue = useMemo(
+    () => selectedPlace,
+    [selectedPlace],
+  );
+  useEffect(() => {
+    if (selectedPlaceContextValue?.id !== placeId) {
+      setIsSelected(false);
+    }
+  }, [selectedPlaceContextValue, placeId]);
 
   return (
-    <div className={isSelected ? [styles.container, styles.selected].join(" ") : styles.container} onClick={handleSelection}>
+    <div
+      className={
+        isSelected
+          ? [styles.container, styles.selected].join(" ")
+          : styles.container
+      }
+      onClick={handleSelection}
+    >
       <div className={styles.header}>
         <div className={styles.name}>{place.name}</div>
         <Rating rate={place.rating}></Rating>

@@ -2,8 +2,10 @@ import { Place } from "@/domain/entities/place";
 import { createContext } from "react";
 
 type SelectedPlaceContextType = {
-  selectedPlace?: Place,
-  setSelectedPlace: (p: Place) => void
-}
+  selectedPlace?: Place;
+  setSelectedPlace: (p: Place) => void;
+};
 
-export const SelectedPlaceContext = createContext<SelectedPlaceContextType>({ setSelectedPlace: () => {}});
+export const SelectedPlaceContext = createContext<SelectedPlaceContextType>({
+  setSelectedPlace: () => {},
+});

@@ -20,9 +20,8 @@
   flex-direction: row;
   flex-wrap: no-wrap;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
 }
-
 
 .name {
   font-weight: bold;

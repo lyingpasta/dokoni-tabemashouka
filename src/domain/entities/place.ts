@@ -12,3 +12,16 @@ export type Category = {
   id: string;
   label: string;
 };
+
+export type ExtendedPlace = Place & {
+  description?: string;
+  email?: string;
+  tel?: string;
+  hours?: string;
+  isOpenNow?: boolean;
+  isVerified?: boolean;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  twitterUrl?: string;
+  price?: number;
+};

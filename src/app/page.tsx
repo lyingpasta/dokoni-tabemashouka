@@ -1,6 +1,5 @@
 "use client";
 
-import { getNearbyPlaces } from "@/infrastructure/api/places";
 import styles from "./page.module.css";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -18,6 +17,7 @@ import { PlacesContext } from "@/infrastructure/context/places-context.provider"
 import { SearchCriteriaContext } from "@/infrastructure/context/seach-criteria-context.provider";
 import PlaceDetails from "@/components/place-details";
 import { SelectedPlaceContext } from "@/infrastructure/context/selected-place-context.provider";
+import { getNearbyPlaces } from "@/infrastructure/api/places/get-places-by-coordinates-and-radius";
 
 const MapComponent = dynamic(() => import("../components/map"), { ssr: false });
 const MarkerComponent = dynamic(
@@ -27,7 +27,9 @@ const MarkerComponent = dynamic(
 
 export default function Home() {
   const [nearbyPlaces, setNearbyPlaces] = useState<Place[]>([]);
-  const [selectedPlace, setSelectedPlace] = useState<Place | undefined>(undefined);
+  const [selectedPlace, setSelectedPlace] = useState<Place | undefined>(
+    undefined,
+  );
   const [query, setQuery] = useState("");
   const [searchFilters, setSearchFilters] = useState(
     categories.map((category) => ({ ...category, isActive: false })),
@@ -38,7 +40,10 @@ export default function Home() {
     () => ({ query, searchFilters, setQuery, setSearchFilters }),
     [query, setQuery, searchFilters, setSearchFilters],
   );
-  const selectedPlaceContextValue = useMemo(() => ({ selectedPlace, setSelectedPlace }), [selectedPlace])
+  const selectedPlaceContextValue = useMemo(
+    () => ({ selectedPlace, setSelectedPlace }),
+    [selectedPlace],
+  );
 
   const getActiveFilterCategoryIds = useCallback(
     (): string[] =>
@@ -49,6 +54,7 @@ export default function Home() {
   );
 
   useEffect(() => {
+    console.log("rendering");
     const categoriesToSearch = getActiveFilterCategoryIds();
     getNearbyPlaces(
       [center[0], center[1]],
@@ -63,7 +69,6 @@ export default function Home() {
     <PlacesContext.Provider value={placesContextValue}>
       <div className={styles.page}>
         <div className={styles.container}>
-
           <SearchCriteriaContext.Provider value={searchCriteriaContextValue}>
             <div className={styles.topBar}>
               <FiltersSet />
@@ -74,7 +79,12 @@ export default function Home() {
           <SelectedPlaceContext.Provider value={selectedPlaceContextValue}>
             <div className={styles.content}>
               <div className={styles.mapContainer}>
-                <MapComponent center={center} focusPoint={selectedPlace?.coordinates as LatLngTuple ?? undefined}>
+                <MapComponent
+                  center={center}
+                  focusPoint={
+                    (selectedPlace?.coordinates as LatLngTuple) ?? undefined
+                  }
+                >
                   {nearbyPlaces.map(makePlaceMarker)}
                 </MapComponent>
               </div>
@@ -84,7 +94,6 @@ export default function Home() {
             </div>
 
             <PlaceDetails />
-
           </SelectedPlaceContext.Provider>
         </div>
       </div>

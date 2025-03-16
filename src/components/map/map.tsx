@@ -12,7 +12,7 @@ type MapComponentInput = {
 export function MapComponent({
   center,
   children,
-  focusPoint
+  focusPoint,
 }: Readonly<MapComponentInput>) {
   return (
     <MapContainer
