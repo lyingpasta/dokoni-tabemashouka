@@ -18,6 +18,7 @@ import { SearchCriteriaContext } from "@/infrastructure/context/seach-criteria-c
 import PlaceDetails from "@/components/place-details";
 import { SelectedPlaceContext } from "@/infrastructure/context/selected-place-context.provider";
 import { getNearbyPlaces } from "@/infrastructure/api/places/get-places-by-coordinates-and-radius";
+import { PopupContent } from "@/components/map/popup-content";
 
 const MapComponent = dynamic(() => import("../components/map"), { ssr: false });
 const MarkerComponent = dynamic(
@@ -102,7 +103,11 @@ export default function Home() {
 }
 
 const makePlaceMarker = (place: Place) => (
-  <MarkerComponent key={place.id} position={place.coordinates as LatLngTuple}>
-    <div>{place.name}</div>
+  <MarkerComponent
+    key={place.id}
+    position={place.coordinates as LatLngTuple}
+    place={place}
+  >
+    <PopupContent place={place} />
   </MarkerComponent>
 );

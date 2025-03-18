@@ -13,11 +13,6 @@ export default function ListItem({ place }: ListItemProps) {
   const [isSelected, setIsSelected] = useState(false);
   const { selectedPlace, setSelectedPlace } = useContext(SelectedPlaceContext);
 
-  const handleSelection = () => {
-    setIsSelected(true);
-    setSelectedPlace(place);
-  };
-
   const selectedPlaceContextValue = useMemo(
     () => selectedPlace,
     [selectedPlace],
@@ -25,8 +20,14 @@ export default function ListItem({ place }: ListItemProps) {
   useEffect(() => {
     if (selectedPlaceContextValue?.id !== placeId) {
       setIsSelected(false);
+    } else {
+      setIsSelected(true);
     }
   }, [selectedPlaceContextValue, placeId]);
+
+  const handleSelection = () => {
+    setSelectedPlace(place);
+  };
 
   return (
     <div
@@ -41,8 +42,13 @@ export default function ListItem({ place }: ListItemProps) {
         <div className={styles.name}>{place.name}</div>
         <Rating rate={place.rating}></Rating>
       </div>
-      <div className={styles.category}>{place.category.label}</div>
-      <div className={styles.address}>{place.address}</div>
+      <div className={styles.price}>
+        {place.price > 0 ? "¥".repeat(place.price) : "-"}
+      </div>
+      <div className={styles.category}>
+        {place.category.label}
+        <div className={styles.distance}>at {place.distance}m</div>
+      </div>
     </div>
   );
 }

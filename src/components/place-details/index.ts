@@ -3,4 +3,4 @@ import { PlacePhoto } from "./place-photo";
 import { PlacePhotoCarousel } from "./place-photo-carousel";
 
 export default PlaceDetails;
-export { PlacePhoto, PlacePhotoCarousel }
+export { PlacePhoto, PlacePhotoCarousel };

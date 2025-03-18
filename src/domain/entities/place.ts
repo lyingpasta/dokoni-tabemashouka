@@ -1,10 +1,11 @@
 export type Place = {
-  id: string;
-  coordinates: number[];
-  name: string;
-  address: string;
   category: Category;
+  coordinates: number[];
+  distance: number;
+  id: string;
   link: string;
+  name: string;
+  price: number;
   rating: number;
 };
 
@@ -14,16 +15,17 @@ export type Category = {
 };
 
 export type ExtendedPlace = Place & {
+  address: string;
   description?: string;
   email?: string;
-  tel?: string;
+  facebookUrl?: string;
   hours?: string;
+  instagramUrl?: string;
   isOpenNow?: boolean;
   isVerified?: boolean;
-  facebookUrl?: string;
-  instagramUrl?: string;
-  twitterUrl?: string;
   price?: number;
+  tel?: string;
+  twitterUrl?: string;
 };
 
 export type PlacePhoto = {

@@ -17,12 +17,13 @@ export async function getPlacesApiKey() {
 }
 
 const requestedFields = [
+  "categories",
+  "distance",
   "fsq_id",
   "geocodes",
-  "name",
-  "location",
-  "categories",
   "link",
+  "name",
+  "price",
   "rating",
 ];
 
@@ -30,10 +31,11 @@ const extendedRequestedFields = [
   ...requestedFields,
   "description",
   "email",
+  "location",
+  "price",
+  "social_media",
   "tel",
   "verified",
-  "social_media",
-  "price",
 ];
 
 export const getRequestedFields = async (extended: boolean = false) =>
@@ -50,9 +52,8 @@ export type PlaceAPIResponsePlaceObject = {
     };
   };
   name: string;
-  location: {
-    formatted_address: string;
-  };
+  distance: number;
+  price: number;
   categories: {
     id: string;
     name: string;
@@ -63,6 +64,9 @@ export type PlaceAPIResponsePlaceObject = {
 
 export type ExtendedPlaceAPIResponsePlaceObject =
   PlaceAPIResponsePlaceObject & {
+    location: {
+      formatted_address: string;
+    };
     description: string;
     email: string;
     tel: string;

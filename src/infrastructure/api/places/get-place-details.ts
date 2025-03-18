@@ -14,6 +14,7 @@ const fromPlaceToDomain = async (
   const simplified = await simplifiedFromPlaceToDomain(place);
   return {
     ...simplified,
+    address: place.location.formatted_address,
     description: place.description,
     email: place.email,
     tel: place.tel,

@@ -13,7 +13,8 @@ export const fromPlaceToDomain = async (
   id: place.fsq_id,
   coordinates: [place.geocodes.main.latitude, place.geocodes.main.longitude],
   name: place.name,
-  address: place.location.formatted_address,
+  distance: place.distance,
+  price: place.price,
   category: {
     // Get last category child -- TODO for filter purpose
     id: place.categories[place.categories.length - 1].id,

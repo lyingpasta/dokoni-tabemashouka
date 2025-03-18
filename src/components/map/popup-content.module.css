@@ -1,0 +1,25 @@
+.container {
+  transition: background-color 0.5s;
+}
+
+.name {
+  font-weight: bold;
+  min-width: 200px;
+}
+
+.category {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.distance {
+  font-size: 0.9rem;
+  color: #707070;
+}
+
+.price {
+  font-size: 0.9rem;
+  color: #707070;
+}
