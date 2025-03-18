@@ -4,37 +4,43 @@ import L, { LatLngTuple } from "leaflet";
 import { useContext } from "react";
 import { Marker, Popup } from "react-leaflet";
 
-const marker = new L.Icon({
+const standardMarkerIcon = new L.Icon({
   iconUrl: "/marker.svg",
   iconSize: new L.Point(40, 40),
 });
 
-export function SelfPositionMarkerComponent({
-  position,
-}: {
-  position: LatLngTuple;
-}) {
-  return <MarkerComponent position={position}>You are here!</MarkerComponent>;
-}
+const selectedMarkerIcon = new L.Icon({
+  iconUrl: "/selected-marker.svg",
+  iconSize: new L.Point(40, 40),
+});
+
+const selfMarkerIcon = new L.Icon({
+  iconUrl: "/self-marker.svg",
+  iconSize: new L.Point(40, 40),
+});
 
 type MarkerComponentInput = {
   position: LatLngTuple;
   children: React.ReactNode;
+  icon?: L.Icon;
   place?: Place;
 };
 
 export function MarkerComponent({
   position,
   children,
+  icon,
   place,
 }: MarkerComponentInput) {
-  const { setSelectedPlace } = useContext(SelectedPlaceContext);
+  const { selectedPlace, setSelectedPlace } = useContext(SelectedPlaceContext);
+
+  const markerIcon = icon ?? (selectedPlace?.id === place?.id ? selectedMarkerIcon : standardMarkerIcon)
 
   const handleClick = () => place && setSelectedPlace(place);
 
   return (
     <Marker
-      icon={marker}
+      icon={markerIcon}
       position={position}
       autoPanOnFocus={true}
       riseOnHover={true}
@@ -44,3 +50,13 @@ export function MarkerComponent({
     </Marker>
   );
 }
+
+export function SelfPositionMarkerComponent({
+  position,
+}: {
+  position: LatLngTuple;
+}) {
+  return <MarkerComponent position={position} icon={selfMarkerIcon}>You are here!</MarkerComponent>;
+}
+
+

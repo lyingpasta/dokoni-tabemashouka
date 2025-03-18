@@ -29,7 +29,7 @@ export function PlacePhoto({ url }: PlacePhotoInput) {
         src={url}
         alt={""}
         fill={true}
-        sizes="width: 800px"
+        sizes="width: 300px"
         onLoad={() => setIsLoading(false)}
         onError={handleError}
         className={isLoading ? styles.hidden : styles.image}
