@@ -32,6 +32,7 @@ COPY --from=builder /app/package.json /app/package.json
 COPY --from=builder /app/.next /app/.next
 COPY --from=builder /app/node_modules /app/node_modules
 COPY --from=builder /app/public /app/public
+COPY --from=builder /app/next.config.mjs /app/next.config.mjs
 
 # Set the working directory
 WORKDIR /app

@@ -12,6 +12,11 @@ export function PlacePhoto({ url }: PlacePhotoInput) {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
+  const handleError = () => {
+    setIsLoading(false);
+    setIsError(true)
+  }
+
   return (
     <div className={styles.container}>
       {isLoading ? <Loader /> : <></>}
@@ -24,9 +29,9 @@ export function PlacePhoto({ url }: PlacePhotoInput) {
         src={url}
         alt={""}
         fill={true}
-        sizes="max-width: 800px"
+        sizes="width: 800px"
         onLoad={() => setIsLoading(false)}
-        onError={() => setIsError(true)}
+        onError={handleError}
         className={isLoading ? styles.hidden : styles.image}
       />
     </div>
