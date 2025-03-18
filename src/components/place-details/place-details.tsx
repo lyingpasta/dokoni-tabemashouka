@@ -5,6 +5,7 @@ import { ExtendedPlace } from "@/domain/entities/place";
 import Rating from "../rating";
 import { getPlaceDetails } from "@/infrastructure/api/places";
 import { FaRegCheckCircle } from "react-icons/fa";
+import { PlacePhotoCarousel } from "./place-photo-carousel";
 
 export default function PlaceDetails() {
   const { selectedPlace } = useContext(SelectedPlaceContext);
@@ -17,44 +18,42 @@ export default function PlaceDetails() {
     [selectedPlace],
   );
   useEffect(() => {
-    console.log("fetch place details");
     if (selectedPlaceContextValue) {
-      getPlaceDetails(selectedPlaceContextValue.id)
-        .then((details) => setPlaceDetails(details))
+      getPlaceDetails(selectedPlaceContextValue.id).then((details) =>
+        setPlaceDetails(details),
+      );
     }
   }, [selectedPlaceContextValue]);
 
-  return (
-    <div className={placeDetails ? styles.details : styles.hidden}>
-      {placeDetails ? (
-        <>
-          <div className={styles.carrousel}></div>
-          <div className={styles.info}>
-            <div className={styles.header}>
-              <div className={styles.name}>{placeDetails.name}</div>
-              <div className={styles.icons}>
-                <div
-                  className={
-                    placeDetails.isVerified
-                      ? [styles.verified, styles.checkmark].join(" ")
-                      : [styles.unverified, styles.checkmark].join(" ")
-                  }
-                >
-                  <FaRegCheckCircle />
-                </div>
-                <Rating rate={placeDetails.rating} />
-              </div>
+  return placeDetails ? (
+    <div className={styles.details}>
+      <div className={styles.carrousel}>
+        <PlacePhotoCarousel placeId={placeDetails.id} />
+      </div>
+      <div className={styles.info}>
+        <div className={styles.header}>
+          <div className={styles.name}>{placeDetails.name}</div>
+          <div className={styles.icons}>
+            <div
+              className={
+                placeDetails.isVerified
+                  ? [styles.verified, styles.checkmark].join(" ")
+                  : [styles.unverified, styles.checkmark].join(" ")
+              }
+            >
+              <FaRegCheckCircle />
             </div>
-            <div className={styles.category}>{placeDetails.category.label}</div>
-            <div className={styles.address}>{placeDetails.address}</div>
-            <div className={styles.description}>
-              <p>{placeDetails.description ?? "No description provided"}</p>
-            </div>
+            <Rating rate={placeDetails.rating} />
           </div>
-        </>
-      ) : (
-        <></>
-      )}
+        </div>
+        <div className={styles.category}>{placeDetails.category.label}</div>
+        <div className={styles.address}>{placeDetails.address}</div>
+        <div className={styles.description}>
+          <p>{placeDetails.description ?? "No description provided"}</p>
+        </div>
+      </div>
     </div>
+  ) : (
+    <></>
   );
 }

@@ -25,3 +25,8 @@ export type ExtendedPlace = Place & {
   twitterUrl?: string;
   price?: number;
 };
+
+export type PlacePhoto = {
+  id: string;
+  url: string;
+};
