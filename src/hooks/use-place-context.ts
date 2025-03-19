@@ -3,6 +3,6 @@ import { createContext, useContext } from "react";
 
 export const PlacesContext = createContext<Place[]>([]);
 
-export const PlacesContextProvider = PlacesContext.Provider
+export const PlacesContextProvider = PlacesContext.Provider;
 
-export const usePlacesContext = () => useContext(PlacesContext)
+export const usePlacesContext = () => useContext(PlacesContext);

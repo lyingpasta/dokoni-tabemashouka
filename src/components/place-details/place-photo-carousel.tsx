@@ -14,7 +14,7 @@ export function PlacePhotoCarousel({
 }: Readonly<PlacePhotoCarouselInputType>) {
   const [photos, setPhotos] = useState<PlacePhoto[]>([]);
   const [error, setError] = useState(false);
-  const [activePhotoIndex, setActivePhotoIndex] = useState(0)
+  const [activePhotoIndex, setActivePhotoIndex] = useState(0);
 
   useEffect(() => {
     getPlacePhotos(placeId)
@@ -24,31 +24,36 @@ export function PlacePhotoCarousel({
 
   const handlePrevious = () => {
     if (activePhotoIndex === 0) {
-      setActivePhotoIndex(photos.length - 1)
+      setActivePhotoIndex(photos.length - 1);
     } else {
-      setActivePhotoIndex(activePhotoIndex - 1)
+      setActivePhotoIndex(activePhotoIndex - 1);
     }
-  }
+  };
 
   const handleNext = () => {
     if (activePhotoIndex === photos.length - 1) {
-      setActivePhotoIndex(0)
+      setActivePhotoIndex(0);
     } else {
-      setActivePhotoIndex(activePhotoIndex + 1)
+      setActivePhotoIndex(activePhotoIndex + 1);
     }
-  }
+  };
 
   return (
     <div className={styles.container}>
       {error ? (
         <Error message="Sorry! We couldn't retrieve the photos of this establishment..."></Error>
       ) : (
-        photos.length > 0 &&
-        <div className={styles.viewport}>
-          <div className={styles.previous} onClick={handlePrevious}><div className={styles.chevron}>&#8249;</div></div>
-          <PlacePhotoComponent url={photos[activePhotoIndex].url} />
-          <div className={styles.next} onClick={handleNext}><div className={styles.chevron}>&#8250;</div></div>
-        </div>
+        photos.length > 0 && (
+          <div className={styles.viewport}>
+            <div className={styles.previous} onClick={handlePrevious}>
+              <div className={styles.chevron}>&#8249;</div>
+            </div>
+            <PlacePhotoComponent url={photos[activePhotoIndex].url} />
+            <div className={styles.next} onClick={handleNext}>
+              <div className={styles.chevron}>&#8250;</div>
+            </div>
+          </div>
+        )
       )}
     </div>
   );

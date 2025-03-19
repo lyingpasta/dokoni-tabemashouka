@@ -18,6 +18,6 @@ export const SearchCriteriaContext = createContext<SearchCriteriaContextType>({
   setSearchFilters: () => {},
 });
 
-export const SearchCriteriaContextProvider = SearchCriteriaContext.Provider
+export const SearchCriteriaContextProvider = SearchCriteriaContext.Provider;
 
-export const useSearchCriteriaContext = () => useContext(SearchCriteriaContext)
+export const useSearchCriteriaContext = () => useContext(SearchCriteriaContext);

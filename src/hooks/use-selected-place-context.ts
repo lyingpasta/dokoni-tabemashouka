@@ -7,9 +7,9 @@ type SelectedPlaceContextType = {
 };
 
 export const SelectedPlaceContext = createContext<SelectedPlaceContextType>({
-  setSelectedPlace: () => { },
+  setSelectedPlace: () => {},
 });
 
-export const SelectedPlaceContextProvider = SelectedPlaceContext.Provider
+export const SelectedPlaceContextProvider = SelectedPlaceContext.Provider;
 
-export const useSelectedPlaceContext = () => useContext(SelectedPlaceContext)
+export const useSelectedPlaceContext = () => useContext(SelectedPlaceContext);

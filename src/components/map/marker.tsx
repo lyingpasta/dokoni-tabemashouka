@@ -33,7 +33,9 @@ export function MarkerComponent({
 }: MarkerComponentInput) {
   const { selectedPlace, setSelectedPlace } = useSelectedPlaceContext();
 
-  const markerIcon = icon ?? (selectedPlace?.id === place?.id ? selectedMarkerIcon : standardMarkerIcon)
+  const markerIcon =
+    icon ??
+    (selectedPlace?.id === place?.id ? selectedMarkerIcon : standardMarkerIcon);
 
   const handleClick = () => place && setSelectedPlace(place);
 
@@ -55,7 +57,9 @@ export function SelfPositionMarkerComponent({
 }: {
   position: LatLngTuple;
 }) {
-  return <MarkerComponent position={position} icon={selfMarkerIcon}>You are here!</MarkerComponent>;
+  return (
+    <MarkerComponent position={position} icon={selfMarkerIcon}>
+      You are here!
+    </MarkerComponent>
+  );
 }
-
-

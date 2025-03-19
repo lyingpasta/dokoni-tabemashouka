@@ -19,6 +19,7 @@ import { PlacesContextProvider } from "@/hooks/use-place-context";
 import { SearchCriteriaContextProvider } from "@/hooks/use-search-criteria-context";
 import { SelectedPlaceContextProvider } from "@/hooks/use-selected-place-context";
 import { getNearbyPlaces } from "@/server/api/places";
+import RandomizeButton from "@/components/randomize";
 
 const MapComponent = dynamic(() => import("../components/map"), { ssr: false });
 const MarkerComponent = dynamic(
@@ -69,14 +70,15 @@ export default function Home() {
     <PlacesContextProvider value={placesContextValue}>
       <div className={styles.page}>
         <div className={styles.container}>
-          <SearchCriteriaContextProvider value={searchCriteriaContextValue}>
-            <div className={styles.topBar}>
-              <FiltersSet />
-              <SearchBar />
-            </div>
-          </SearchCriteriaContextProvider>
-
           <SelectedPlaceContextProvider value={selectedPlaceContextValue}>
+            <SearchCriteriaContextProvider value={searchCriteriaContextValue}>
+              <div className={styles.topBar}>
+                <FiltersSet />
+                <RandomizeButton />
+                <SearchBar />
+              </div>
+            </SearchCriteriaContextProvider>
+
             <div className={styles.content}>
               <div className={styles.mapContainer}>
                 <MapComponent

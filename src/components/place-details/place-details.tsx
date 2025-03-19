@@ -8,7 +8,7 @@ import { useSelectedPlaceContext } from "@/hooks/use-selected-place-context";
 import { getPlaceDetails } from "@/server/api/places";
 
 export default function PlaceDetails() {
-  const { selectedPlace } = useSelectedPlaceContext()
+  const { selectedPlace } = useSelectedPlaceContext();
   const [placeDetails, setPlaceDetails] = useState<ExtendedPlace | undefined>(
     undefined,
   );

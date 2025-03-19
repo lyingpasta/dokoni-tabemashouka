@@ -14,8 +14,8 @@ export function PlacePhoto({ url }: PlacePhotoInput) {
 
   const handleError = () => {
     setIsLoading(false);
-    setIsError(true)
-  }
+    setIsError(true);
+  };
 
   return (
     <div className={styles.container}>
