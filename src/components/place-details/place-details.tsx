@@ -1,14 +1,14 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./place-details.module.css";
-import { SelectedPlaceContext } from "@/infrastructure/context/selected-place-context.provider";
 import { ExtendedPlace } from "@/domain/entities/place";
 import Rating from "../rating";
-import { getPlaceDetails } from "@/infrastructure/api/places";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { PlacePhotoCarousel } from "./place-photo-carousel";
+import { useSelectedPlaceContext } from "@/hooks/use-selected-place-context";
+import { getPlaceDetails } from "@/server/api/places";
 
 export default function PlaceDetails() {
-  const { selectedPlace } = useContext(SelectedPlaceContext);
+  const { selectedPlace } = useSelectedPlaceContext()
   const [placeDetails, setPlaceDetails] = useState<ExtendedPlace | undefined>(
     undefined,
   );

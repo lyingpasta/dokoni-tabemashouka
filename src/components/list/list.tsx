@@ -1,11 +1,10 @@
 import { Place } from "@/domain/entities/place";
-import { useContext } from "react";
 import styles from "./list.module.css";
 import ListItem from "./list-item";
-import { PlacesContext } from "@/infrastructure/context/places-context.provider";
+import { usePlacesContext } from "@/hooks/use-place-context";
 
 export default function List() {
-  const data: Place[] = useContext(PlacesContext);
+  const data: Place[] = usePlacesContext();
 
   return (
     <div className={styles.container}>

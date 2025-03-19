@@ -1,8 +1,8 @@
 import { Place } from "@/domain/entities/place";
 import styles from "./list-item.module.css";
-import { useContext, useEffect, useMemo, useState } from "react";
-import { SelectedPlaceContext } from "@/infrastructure/context/selected-place-context.provider";
+import { useEffect, useMemo, useState } from "react";
 import Rating from "../rating";
+import { useSelectedPlaceContext } from "@/hooks/use-selected-place-context";
 
 interface ListItemProps {
   place: Place;
@@ -11,7 +11,7 @@ interface ListItemProps {
 export default function ListItem({ place }: ListItemProps) {
   const placeId = place.id;
   const [isSelected, setIsSelected] = useState(false);
-  const { selectedPlace, setSelectedPlace } = useContext(SelectedPlaceContext);
+  const { selectedPlace, setSelectedPlace } = useSelectedPlaceContext();
 
   const selectedPlaceContextValue = useMemo(
     () => selectedPlace,

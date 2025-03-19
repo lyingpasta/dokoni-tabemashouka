@@ -1,7 +1,6 @@
 import { Place } from "@/domain/entities/place";
-import { SelectedPlaceContext } from "@/infrastructure/context/selected-place-context.provider";
+import { useSelectedPlaceContext } from "@/hooks/use-selected-place-context";
 import L, { LatLngTuple } from "leaflet";
-import { useContext } from "react";
 import { Marker, Popup } from "react-leaflet";
 
 const standardMarkerIcon = new L.Icon({
@@ -32,7 +31,7 @@ export function MarkerComponent({
   icon,
   place,
 }: MarkerComponentInput) {
-  const { selectedPlace, setSelectedPlace } = useContext(SelectedPlaceContext);
+  const { selectedPlace, setSelectedPlace } = useSelectedPlaceContext();
 
   const markerIcon = icon ?? (selectedPlace?.id === place?.id ? selectedMarkerIcon : standardMarkerIcon)
 

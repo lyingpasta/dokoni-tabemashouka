@@ -1,5 +1,5 @@
 import { categories, CategoryFilter } from "@/domain/value-objects/categories";
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 
 type SearchCriteriaContextType = {
   query: string;
@@ -17,3 +17,7 @@ export const SearchCriteriaContext = createContext<SearchCriteriaContextType>({
   })),
   setSearchFilters: () => {},
 });
+
+export const SearchCriteriaContextProvider = SearchCriteriaContext.Provider
+
+export const useSearchCriteriaContext = () => useContext(SearchCriteriaContext)

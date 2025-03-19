@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import styles from "./place-photo-carousel.module.css";
 import { PlacePhoto } from "@/domain/entities/place";
-import { getPlacePhotos } from "@/infrastructure/api/places/get-place-photos";
 import { PlacePhoto as PlacePhotoComponent } from "./place-photo";
 import Error from "../error";
+import { getPlacePhotos } from "@/server/api/places/get-place-photos";
 
 type PlacePhotoCarouselInputType = {
   placeId: string;

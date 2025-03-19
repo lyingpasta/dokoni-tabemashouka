@@ -1,10 +1,9 @@
-import { SearchCriteriaContext } from "@/infrastructure/context/seach-criteria-context.provider";
 import { FilterItem } from "./filter-item";
 import styles from "./filters-set.module.css";
-import { useContext } from "react";
+import { useSearchCriteriaContext } from "@/hooks/use-search-criteria-context";
 
 export function FiltersSet() {
-  const { searchFilters, setSearchFilters } = useContext(SearchCriteriaContext);
+  const { searchFilters, setSearchFilters } = useSearchCriteriaContext();
 
   const onFilterToggled = (categoryId: string) => (value: boolean) =>
     setSearchFilters(

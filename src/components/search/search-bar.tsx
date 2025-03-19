@@ -1,10 +1,11 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import styles from "./search-bar.module.css";
-import { useContext, useState } from "react";
-import { SearchCriteriaContext } from "@/infrastructure/context/seach-criteria-context.provider";
+import { useState } from "react";
+import { useSearchCriteriaContext } from "@/hooks/use-search-criteria-context";
 
 export function SearchBar() {
-  const { query, setQuery } = useContext(SearchCriteriaContext);
+  const { query, setQuery } = useSearchCriteriaContext();
+
   const [value, setValue] = useState(query);
 
   const onSubmit = (event: React.FormEvent) => {
