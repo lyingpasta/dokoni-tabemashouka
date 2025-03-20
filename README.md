@@ -2,23 +2,51 @@
 
 A modern restaurant finder application that helps users discover dining spots near Cogent Labs office in Tokyo. Built with Next.js 13+, React Query, and TypeScript.
 
-## Problem & Solution
+## Getting Started
 
-### Problem
-Finding a place to eat can be overwhelming, especially in a city like Tokyo with countless options. Users need a quick, reliable way to:
-- Find restaurants within walking distance (1km) of a specific location
-- Get random restaurant suggestions to break decision paralysis
-- Search and filter restaurants based on preferences
-- View detailed information about selected restaurants including location, ratings, and photos
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Foursquare Places API key
 
-### Solution
+### Installation
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+4. Add your Foursquare API key to `.env`
+
+5. a. Run on your machine:
+### Development
+```bash
+npm run dev
+```
+
+### Production Build
+```bash
+npm run build
+npm start
+```
+
+5. b. Run in docker
+### Production Build
+```bash
+docker compose up
+```
+
+## About
+
 Dokoni Tabemashouka provides an intuitive interface that:
 - Integrates with Foursquare Places API for accurate restaurant data
 - Features an interactive map view for spatial context
 - Offers real-time search and filtering capabilities
 - Implements smart caching and rate limiting for optimal performance
 - Provides a responsive, modern UI that works across devices
-- Includes comprehensive logging for monitoring and debugging
 
 ## Technical Architecture
 
@@ -130,43 +158,6 @@ The philosophy behind this organization is maintining a clean code, with an obvi
    - Implement log aggregation and analysis
    - Add log rotation and retention policies
    - Implement log batching for high-traffic scenarios
-
-## Getting Started
-
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-- Foursquare Places API key
-
-### Installation
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Set up environment variables:
-   ```bash
-   cp .env.example .env
-   ```
-4. Add your Foursquare API key to `.env`
-
-5. a. Run on your machine:
-### Development
-```bash
-npm run dev
-```
-
-### Production Build
-```bash
-npm run build
-npm start
-```
-
-5. b. Run in docker
-### Production Build
-```bash
-docker compose up
-```
 
 ### Logging Configuration
 The logging system is configured through environment variables:
