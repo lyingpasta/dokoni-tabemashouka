@@ -1,6 +1,7 @@
 # Dokoni Tabemashouka (どこに食べましょうか)
 
 A modern restaurant finder application that helps users discover dining spots near Cogent Labs office in Tokyo. Built with Next.js 13+, React Query, and TypeScript.
+Feel free to try the app [Here](https://tyjani.fr/)
 
 ## Getting Started
 
