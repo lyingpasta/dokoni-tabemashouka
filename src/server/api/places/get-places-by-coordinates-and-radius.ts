@@ -6,6 +6,14 @@ import {
   getRequestedFields,
   PlaceAPIResponsePlaceObject,
 } from ".";
+import { rateLimit } from "../rate-limit";
+import {
+  log,
+  logApiCall,
+  LogCategory,
+  logError,
+  logPerformance,
+} from "@/utils/logger";
 
 export const fromPlaceToDomain = async (
   place: PlaceAPIResponsePlaceObject,
@@ -30,13 +38,27 @@ export async function getNearbyPlaces(
   query: string,
   radius: number = 1000,
 ): Promise<Place[]> {
-  console.log("fetching nearby places with params", {
+  log.info("Requesting places by criteria", {
+    category: LogCategory.API,
     coordinates,
     categories,
     query,
     radius,
   });
+  const startTime = Date.now();
+  const rateLimitKey = `places:${coordinates.join(",")}:${categories.join(",")}:${query}`;
+
   try {
+    if (!rateLimit(rateLimitKey)) {
+      logError(
+        "Rate limit exceeded",
+        new Error("Rate limit exceeded"),
+        "places-api",
+        { rateLimitKey },
+      );
+      throw new Error("Rate limit exceeded. Please try again later.");
+    }
+
     const placesUrl = await getPlacesUrl();
     const placesApiKey = await getPlacesApiKey();
     const requestedFields = await getRequestedFields();
@@ -59,20 +81,48 @@ export async function getNearbyPlaces(
       },
     });
 
+    const duration = Date.now() - startTime;
+    logPerformance("api-latency", duration, "places-api", {
+      endpoint: "search",
+      coordinates,
+      categories,
+      query,
+    });
+
     if (res.status !== 200) {
       const reason = await res.json();
-      throw Error(
+      const error = new Error(
         `Error while fetching place ${res.status} ${res.statusText}: ${reason.message}`,
       );
+      logApiCall(url.toString(), "GET", res.status, duration, error);
+      throw error;
     }
+    logApiCall(url.toString(), "GET", res.status, duration);
 
     const places = await res.json();
-
     const domainRes = await Promise.all(places.results.map(fromPlaceToDomain));
+
+    logPerformance("results-count", domainRes.length, "places-api", {
+      endpoint: "search",
+      coordinates,
+      categories,
+      query,
+    });
 
     return domainRes;
   } catch (e) {
-    console.error(e);
+    const duration = Date.now() - startTime;
+    logError(
+      "Failed to fetch nearby places",
+      e instanceof Error ? e : new Error(String(e)),
+      "places-api",
+      {
+        coordinates,
+        categories,
+        query,
+        duration,
+      },
+    );
     throw new Error("Unexpected Error");
   }
 }

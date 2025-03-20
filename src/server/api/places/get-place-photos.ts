@@ -2,6 +2,14 @@
 
 import { PlacePhoto } from "@/domain/entities/place";
 import { getPlacesApiKey, getPlacesUrl } from ".";
+import { rateLimit } from "../rate-limit";
+import {
+  log,
+  logApiCall,
+  LogCategory,
+  logError,
+  logPerformance,
+} from "@/utils/logger";
 
 type PlaceAPIResponsePhotoObject = {
   id: string;
@@ -17,10 +25,21 @@ const fromPlacePhotoToDomain = (
 });
 
 export async function getPlacePhotos(id: string): Promise<PlacePhoto[]> {
-  console.log("fetching place photos", {
-    id,
-  });
+  log.info("Requesting place photos", { category: LogCategory.API, id });
+  const startTime = Date.now();
+  const rateLimitKey = `place:photos:${id}`;
+
   try {
+    if (!rateLimit(rateLimitKey)) {
+      logError(
+        "Rate limit exceeded",
+        new Error("Rate limit exceeded"),
+        "places-api",
+        { rateLimitKey },
+      );
+      throw new Error("Rate limit exceeded. Please try again later.");
+    }
+
     const placesUrl = await getPlacesUrl();
     const placesApiKey = await getPlacesApiKey();
 
@@ -34,17 +53,41 @@ export async function getPlacePhotos(id: string): Promise<PlacePhoto[]> {
       },
     });
 
+    const duration = Date.now() - startTime;
+    logPerformance("api-latency", duration, "places-api", {
+      endpoint: "photos",
+      id,
+    });
+
     if (res.status !== 200) {
       const reason = await res.json();
-      throw Error(
+      const error = new Error(
         `Error while fetching place photos ${res.status} ${res.statusText}: ${reason.message}`,
       );
+      logApiCall(url.toString(), "GET", res.status, duration, error);
+      throw error;
     }
+    logApiCall(url.toString(), "GET", res.status, duration);
 
     const photos = await res.json();
-    return photos.map(fromPlacePhotoToDomain);
+    const domainPhotos = photos.map(fromPlacePhotoToDomain);
+    logPerformance("results-count", domainPhotos.length, "places-api", {
+      endpoint: "photos",
+      id,
+    });
+
+    return domainPhotos;
   } catch (e) {
-    console.error(e);
+    const duration = Date.now() - startTime;
+    logError(
+      "Failed to fetch places photos",
+      e instanceof Error ? e : new Error(String(e)),
+      "places-api",
+      {
+        id,
+        duration,
+      },
+    );
     throw new Error("Unexpected Error");
   }
 }

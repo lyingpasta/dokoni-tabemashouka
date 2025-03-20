@@ -48,3 +48,11 @@
   border: 1px solid #d1d1d1;
   border-radius: 3px;
 }
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}

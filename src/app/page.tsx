@@ -2,14 +2,11 @@
 
 import styles from "./page.module.css";
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import List from "@/components/list";
 import SearchBar from "@/components/search";
 import FiltersSet from "@/components/filter";
-import {
-  categories,
-  DINING_AND_DRINKING_CATEGORY_ID,
-} from "@/domain/value-objects/categories";
+import { categories } from "@/domain/value-objects/categories";
 import { center } from "@/domain/value-objects/places";
 import { Place } from "@/domain/entities/place";
 import { LatLngTuple } from "leaflet";
@@ -18,9 +15,13 @@ import { PopupContent } from "@/components/map/popup-content";
 import { PlacesContextProvider } from "@/hooks/use-place-context";
 import { SearchCriteriaContextProvider } from "@/hooks/use-search-criteria-context";
 import { SelectedPlaceContextProvider } from "@/hooks/use-selected-place-context";
-import { getNearbyPlaces } from "@/server/api/places";
 import RandomizeButton from "@/components/randomize";
+import { usePlaces } from "@/hooks/use-places";
+import { Loader } from "@/components/loader/loader";
+import Error from "@/components/error";
+import { QueryClientProviders } from "./providers";
 
+// dynamic imports without SSR, important for Map
 const MapComponent = dynamic(() => import("../components/map"), { ssr: false });
 const MarkerComponent = dynamic(
   () => import("../components/map").then((mod) => mod.MarkerComponent),
@@ -28,7 +29,14 @@ const MarkerComponent = dynamic(
 );
 
 export default function Home() {
-  const [nearbyPlaces, setNearbyPlaces] = useState<Place[]>([]);
+  return (
+    <QueryClientProviders>
+      <HomeContent />
+    </QueryClientProviders>
+  );
+}
+
+function HomeContent() {
   const [selectedPlace, setSelectedPlace] = useState<Place | undefined>(
     undefined,
   );
@@ -36,6 +44,17 @@ export default function Home() {
   const [searchFilters, setSearchFilters] = useState(
     categories.map((category) => ({ ...category, isActive: false })),
   );
+
+  const {
+    data: nearbyPlaces = [],
+    isLoading,
+    isError,
+  } = usePlaces({
+    query,
+    categories: searchFilters
+      .filter((filter) => filter.isActive)
+      .map((filter) => filter.id),
+  });
 
   const placesContextValue = useMemo(() => nearbyPlaces, [nearbyPlaces]);
   const searchCriteriaContextValue = useMemo(
@@ -47,52 +66,28 @@ export default function Home() {
     [selectedPlace],
   );
 
-  const getActiveFilterCategoryIds = useCallback(
-    (): string[] =>
-      searchFilters
-        .filter((filter) => filter.isActive)
-        .map((filter) => filter.id),
-    [searchFilters],
-  );
-
-  useEffect(() => {
-    const categoriesToSearch = getActiveFilterCategoryIds();
-    getNearbyPlaces(
-      [center[0], center[1]],
-      categoriesToSearch.length < 1
-        ? [DINING_AND_DRINKING_CATEGORY_ID]
-        : categoriesToSearch,
-      query,
-    ).then((res) => setNearbyPlaces(res));
-  }, [query, searchCriteriaContextValue, getActiveFilterCategoryIds]);
-
   return (
     <PlacesContextProvider value={placesContextValue}>
       <div className={styles.page}>
         <div className={styles.container}>
           <SelectedPlaceContextProvider value={selectedPlaceContextValue}>
             <SearchCriteriaContextProvider value={searchCriteriaContextValue}>
-              <div className={styles.topBar}>
-                <FiltersSet />
-                <RandomizeButton />
-                <SearchBar />
-              </div>
+              <ActionBar />
             </SearchCriteriaContextProvider>
 
             <div className={styles.content}>
-              <div className={styles.mapContainer}>
-                <MapComponent
-                  center={center}
-                  focusPoint={
-                    (selectedPlace?.coordinates as LatLngTuple) ?? undefined
-                  }
-                >
-                  {nearbyPlaces.map(buildPlaceMarker)}
-                </MapComponent>
-              </div>
-              <div className={styles.listContainer}>
-                <List />
-              </div>
+              <Map
+                center={center}
+                focusPoint={
+                  selectedPlace && (selectedPlace.coordinates as LatLngTuple)
+                }
+                nearbyPlaces={nearbyPlaces}
+              />
+              <PlacesList
+                places={nearbyPlaces}
+                isLoading={isLoading}
+                isError={isError}
+              />
             </div>
 
             <PlaceDetails />
@@ -102,6 +97,54 @@ export default function Home() {
     </PlacesContextProvider>
   );
 }
+
+const ActionBar = () => (
+  <div className={styles.topBar}>
+    <FiltersSet />
+    <RandomizeButton />
+    <SearchBar />
+  </div>
+);
+
+const Map = ({
+  center,
+  focusPoint,
+  nearbyPlaces,
+}: {
+  center: LatLngTuple;
+  focusPoint?: LatLngTuple;
+  nearbyPlaces: Place[];
+}) => (
+  <div className={styles.mapContainer}>
+    <MapComponent center={center} focusPoint={focusPoint}>
+      {nearbyPlaces.map(buildPlaceMarker)}
+    </MapComponent>
+  </div>
+);
+
+const PlacesList = ({
+  places,
+  isLoading,
+  isError,
+}: {
+  places: Place[];
+  isLoading: boolean;
+  isError: boolean;
+}) => (
+  <div className={styles.listContainer}>
+    {isLoading ? (
+      <div className={styles.status}>
+        <Loader />
+      </div>
+    ) : isError ? (
+      <div className={styles.status}>
+        <Error message="Sorry! We couldn't retrieve nearby places..." />
+      </div>
+    ) : (
+      <List places={places} />
+    )}
+  </div>
+);
 
 const buildPlaceMarker = (place: Place) => (
   <MarkerComponent
