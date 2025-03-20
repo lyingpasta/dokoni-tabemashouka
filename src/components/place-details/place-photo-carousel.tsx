@@ -13,13 +13,13 @@ export function PlacePhotoCarousel({
   placeId,
 }: Readonly<PlacePhotoCarouselInputType>) {
   const [photos, setPhotos] = useState<PlacePhoto[]>([]);
-  const [error, setError] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
 
   useEffect(() => {
     getPlacePhotos(placeId)
       .then(setPhotos)
-      .catch(() => setError(true));
+      .catch(() => setIsError(true));
   }, [placeId]);
 
   const handlePrevious = () => {
@@ -40,7 +40,7 @@ export function PlacePhotoCarousel({
 
   return (
     <div className={styles.container}>
-      {error ? (
+      {isError ? (
         <Error message="Sorry! We couldn't retrieve the photos of this establishment..."></Error>
       ) : (
         photos.length > 0 && (

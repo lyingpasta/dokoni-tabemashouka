@@ -61,13 +61,13 @@ export const log = {
   error: async (message: string, context: LogContext & { error?: Error }) => {
     const errorContext = context.error
       ? {
-        ...context,
-        error: {
-          message: context.error.message,
-          stack: context.error.stack,
-          name: context.error.name,
-        },
-      }
+          ...context,
+          error: {
+            message: context.error.message,
+            stack: context.error.stack,
+            name: context.error.name,
+          },
+        }
       : context;
     logger.error(createLogEntry(LogLevel.ERROR, message, errorContext));
   },

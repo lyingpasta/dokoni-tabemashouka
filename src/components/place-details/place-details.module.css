@@ -78,3 +78,12 @@
   border-radius: 5px;
   padding: 10px;
 }
+
+.status {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #c9c9c9;
+}

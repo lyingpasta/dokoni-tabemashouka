@@ -5,7 +5,7 @@ export function Loader() {
   const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowMessage(true), 500);
+    const timer = setTimeout(() => setShowMessage(true), 2000);
     return () => clearTimeout(timer);
   }, []);
 
