@@ -32,7 +32,6 @@ const fromPlaceToDomain = async (
     facebookUrl: `facebook.com/${place.social_media?.facebook_id}`,
     instagramUrl: place.social_media?.instagram,
     twitterUrl: place.social_media?.twitter,
-    price: place?.price,
   };
 };
 
@@ -41,17 +40,17 @@ export async function getPlaceDetails(id: string): Promise<ExtendedPlace> {
   const startTime = Date.now();
   const rateLimitKey = `places:details:${id}`;
 
-  try {
-    if (!rateLimit(rateLimitKey)) {
-      logError(
-        "Rate limit exceeded",
-        new Error("Rate limit exceeded"),
-        "places-api",
-        { rateLimitKey },
-      );
-      throw new Error("Rate limit exceeded. Please try again later.");
-    }
+  if (!rateLimit(rateLimitKey)) {
+    logError(
+      "Rate limit exceeded",
+      new Error("Rate limit exceeded"),
+      "places-api",
+      { rateLimitKey },
+    );
+    throw new Error("Rate limit exceeded. Please try again later.");
+  }
 
+  try {
     const placesUrl = await getPlacesUrl();
     const placesApiKey = await getPlacesApiKey();
     const requestedFields = await getRequestedFields(true);

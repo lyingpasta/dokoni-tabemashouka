@@ -48,17 +48,17 @@ export async function getNearbyPlaces(
   const startTime = Date.now();
   const rateLimitKey = `places:${coordinates.join(",")}:${categories.join(",")}:${query}`;
 
-  try {
-    if (!rateLimit(rateLimitKey)) {
-      logError(
-        "Rate limit exceeded",
-        new Error("Rate limit exceeded"),
-        "places-api",
-        { rateLimitKey },
-      );
-      throw new Error("Rate limit exceeded. Please try again later.");
-    }
+  if (!rateLimit(rateLimitKey)) {
+    logError(
+      "Rate limit exceeded",
+      new Error("Rate limit exceeded"),
+      "places-api",
+      { rateLimitKey },
+    );
+    throw new Error("Rate limit exceeded. Please try again later.");
+  }
 
+  try {
     const placesUrl = await getPlacesUrl();
     const placesApiKey = await getPlacesApiKey();
     const requestedFields = await getRequestedFields();

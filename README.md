@@ -154,6 +154,7 @@ The philosophy behind this organization is maintining a clean code, with an obvi
 
 4. **Developer Experience**
    - Add Storybook for component documentation
+   - Add data validation using library like Zod for API data validation
 
 5. **Logging Enhancements**
    - Implement log aggregation and analysis

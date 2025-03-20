@@ -29,17 +29,17 @@ export async function getPlacePhotos(id: string): Promise<PlacePhoto[]> {
   const startTime = Date.now();
   const rateLimitKey = `place:photos:${id}`;
 
-  try {
-    if (!rateLimit(rateLimitKey)) {
-      logError(
-        "Rate limit exceeded",
-        new Error("Rate limit exceeded"),
-        "places-api",
-        { rateLimitKey },
-      );
-      throw new Error("Rate limit exceeded. Please try again later.");
-    }
+  if (!rateLimit(rateLimitKey)) {
+    logError(
+      "Rate limit exceeded",
+      new Error("Rate limit exceeded"),
+      "places-api",
+      { rateLimitKey },
+    );
+    throw new Error("Rate limit exceeded. Please try again later.");
+  }
 
+  try {
     const placesUrl = await getPlacesUrl();
     const placesApiKey = await getPlacesApiKey();
 

@@ -31,5 +31,4 @@ export type ExtendedPlaceAPIResponsePlaceObject =
     };
     verified: boolean;
     social_media: { facebook_id: string; instagram: string; twitter: string };
-    price: number;
   };

@@ -13,6 +13,20 @@ jobs:
       # Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v4
+    
+      # Install Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '23'
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Run unit tests
+      - name: Run Unit Tests
+        run: npm test
 
       # Set up Docker Buildx for better caching
       - name: Set up Docker Buildx
