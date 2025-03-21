@@ -155,6 +155,7 @@ The philosophy behind this organization is maintining a clean code, with an obvi
 4. **Developer Experience**
    - Add Storybook for component documentation
    - Add data validation using library like Zod for API data validation
+   - Add pre-commit hooks to format, run test and build before commiting changes (ensures that the app is safe to push)
 
 5. **Logging Enhancements**
    - Implement log aggregation and analysis
