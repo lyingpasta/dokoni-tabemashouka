@@ -30,5 +30,6 @@ export type ExtendedPlaceAPIResponsePlaceObject =
       open_now: boolean;
     };
     verified: boolean;
-    social_media: { facebook_id: string; instagram: string; twitter: string };
+    website: string;
+    menu: string;
   };

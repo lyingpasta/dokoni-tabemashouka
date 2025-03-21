@@ -29,9 +29,8 @@ const fromPlaceToDomain = async (
     hours: place.hours?.display ?? "",
     isOpenNow: place.hours?.open_now,
     isVerified: place.verified,
-    facebookUrl: `facebook.com/${place.social_media?.facebook_id}`,
-    instagramUrl: place.social_media?.instagram,
-    twitterUrl: place.social_media?.twitter,
+    website: place?.website,
+    menu: place.menu,
   };
 };
 

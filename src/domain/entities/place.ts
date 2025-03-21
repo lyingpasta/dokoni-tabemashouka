@@ -18,14 +18,13 @@ export type ExtendedPlace = Place & {
   address: string;
   description?: string;
   email?: string;
-  facebookUrl?: string;
   hours?: string;
-  instagramUrl?: string;
   isOpenNow?: boolean;
   isVerified?: boolean;
+  menu?: string;
   price?: number;
   tel?: string;
-  twitterUrl?: string;
+  website?: string;
 };
 
 export type PlacePhoto = {

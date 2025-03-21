@@ -30,9 +30,10 @@ const extendedRequestedFields = [
   "email",
   "location",
   "price",
-  "social_media",
   "tel",
   "verified",
+  "website",
+  "menu",
 ];
 
 export const getRequestedFields = async (extended: boolean = false) =>

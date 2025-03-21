@@ -87,3 +87,23 @@
   justify-content: center;
   background-color: #c9c9c9;
 }
+
+.infos {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.infos .card {
+  font-size: 0.8rem;
+  background-color: #d1e1ed;
+  color: #006ba0;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: solid 1px #006ba0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}

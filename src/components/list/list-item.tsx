@@ -3,6 +3,7 @@ import styles from "./list-item.module.css";
 import { useEffect, useMemo, useState } from "react";
 import Rating from "../rating";
 import { useSelectedPlaceContext } from "@/hooks/use-selected-place-context";
+import Price from "../price";
 
 interface ListItemProps {
   place: Place;
@@ -42,9 +43,7 @@ export default function ListItem({ place }: ListItemProps) {
         <div className={styles.name}>{place.name}</div>
         <Rating rate={place.rating}></Rating>
       </div>
-      <div className={styles.price}>
-        {place.price > 0 ? "¥".repeat(place.price) : "-"}
-      </div>
+      <Price value={place.price}></Price>
       <div className={styles.category}>
         {place.category.label}
         <div className={styles.distance}>at {place.distance}m</div>

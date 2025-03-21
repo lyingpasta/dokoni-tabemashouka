@@ -48,11 +48,8 @@ describe("getPlaceDetails", () => {
         open_now: true,
       },
       verified: true,
-      social_media: {
-        facebook_id: "some-fb-id",
-        instagram: "some-inst",
-        twitter: "some-twit",
-      },
+      website: "some-web",
+      menu: "some-menu",
     };
 
     (global.fetch as jest.Mock).mockResolvedValueOnce({
@@ -81,9 +78,8 @@ describe("getPlaceDetails", () => {
       hours: "24/7",
       isOpenNow: true,
       isVerified: true,
-      facebookUrl: `facebook.com/some-fb-id`,
-      instagramUrl: "some-inst",
-      twitterUrl: "some-twit",
+      website: "some-web",
+      menu: "some-menu",
     });
   });
 
