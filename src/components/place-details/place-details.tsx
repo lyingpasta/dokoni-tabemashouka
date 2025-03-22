@@ -52,6 +52,12 @@ export default function PlaceDetails() {
       </div>
     ) : (
       <div className={styles.details}>
+        <div
+          className={styles.close}
+          onClick={() => setPlaceDetails(undefined)}
+        >
+          ✕
+        </div>
         <div className={styles.carrousel}>
           <PlacePhotoCarousel placeId={placeDetails.id} />
         </div>
@@ -99,7 +105,7 @@ export default function PlaceDetails() {
 const InfoCard = ({
   children,
   info,
-  type = "web"
+  type = "web",
 }: {
   children: React.ReactNode;
   type: "tel" | "web";
@@ -108,6 +114,8 @@ const InfoCard = ({
   info && (
     <div className={styles.card}>
       <div className={styles.icon}>{children}</div>
-      <div className={styles.value}><a href={type === "tel" ? `tel:+81${info}` : info}>{info}</a></div>
+      <div className={styles.value}>
+        <a href={type === "tel" ? `tel:+81${info}` : info}>{info}</a>
+      </div>
     </div>
   );
