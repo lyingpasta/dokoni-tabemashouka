@@ -5,8 +5,10 @@ import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import List from "@/components/list";
 import SearchBar from "@/components/search";
-import FiltersSet from "@/components/filter";
-import { categories } from "@/domain/value-objects/categories";
+import FiltersSet, {
+  filterValues,
+  getActiveFilters,
+} from "@/components/filter";
 import { center } from "@/domain/value-objects/places";
 import { Place } from "@/domain/entities/place";
 import { LatLngTuple } from "leaflet";
@@ -42,7 +44,7 @@ function HomeContent() {
   );
   const [query, setQuery] = useState("");
   const [searchFilters, setSearchFilters] = useState(
-    categories.map((category) => ({ ...category, isActive: false })),
+    filterValues.map((filter) => ({ ...filter, isActive: false })),
   );
 
   const {
@@ -51,9 +53,7 @@ function HomeContent() {
     isError,
   } = usePlaces({
     query,
-    categories: searchFilters
-      .filter((filter) => filter.isActive)
-      .map((filter) => filter.id),
+    ...getActiveFilters(searchFilters),
   });
 
   const placesContextValue = useMemo(() => nearbyPlaces, [nearbyPlaces]);

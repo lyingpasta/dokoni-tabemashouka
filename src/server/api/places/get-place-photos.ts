@@ -27,7 +27,7 @@ const fromPlacePhotoToDomain = (
 export async function getPlacePhotos(id: string): Promise<PlacePhoto[]> {
   log.info("Requesting place photos", { category: LogCategory.API, id });
   const startTime = Date.now();
-  const rateLimitKey = `place:photos:${id}`;
+  const rateLimitKey = `places`;
 
   if (!rateLimit(rateLimitKey)) {
     logError(

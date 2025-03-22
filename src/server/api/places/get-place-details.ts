@@ -37,7 +37,7 @@ const fromPlaceToDomain = async (
 export async function getPlaceDetails(id: string): Promise<ExtendedPlace> {
   log.info("Requesting place details", { category: LogCategory.API, id });
   const startTime = Date.now();
-  const rateLimitKey = `places:details:${id}`;
+  const rateLimitKey = `places`;
 
   if (!rateLimit(rateLimitKey)) {
     logError(

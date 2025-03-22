@@ -81,6 +81,117 @@ describe("getNearbyPlaces", () => {
     );
   });
 
+  describe("when filtering by rating", () => {
+    it("should return the list of places with more that 8 rating and sorted", async () => {
+      const mockResponse = {
+        results: [
+          {
+            fsq_id: "123",
+            name: "First Place",
+            geocodes: {
+              main: {
+                latitude: 35.6594,
+                longitude: 139.7005,
+              },
+            },
+            categories: [
+              {
+                id: "cat1",
+                name: "Category 1",
+              },
+            ],
+            distance: 100,
+            price: 2,
+            link: "https://test.com",
+            rating: 9.5,
+          },
+          {
+            fsq_id: "123",
+            name: "Second Place",
+            geocodes: {
+              main: {
+                latitude: 35.6594,
+                longitude: 139.7005,
+              },
+            },
+            categories: [
+              {
+                id: "cat1",
+                name: "Category 1",
+              },
+            ],
+            distance: 100,
+            price: 2,
+            link: "https://test.com",
+            rating: 8.5,
+          },
+          {
+            fsq_id: "123",
+            name: "Not returned Place",
+            geocodes: {
+              main: {
+                latitude: 35.6594,
+                longitude: 139.7005,
+              },
+            },
+            categories: [
+              {
+                id: "cat1",
+                name: "Category 1",
+              },
+            ],
+            distance: 100,
+            price: 2,
+            link: "https://test.com",
+            rating: 4.5,
+          },
+        ],
+      };
+
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        status: 200,
+        json: () => Promise.resolve(mockResponse),
+      });
+
+      const result = await getNearbyPlaces(
+        mockCoordinates,
+        mockCategories,
+        mockQuery,
+        8,
+      );
+
+      expect(result).toHaveLength(2);
+      expect(result).toEqual([
+        {
+          id: "123",
+          name: "First Place",
+          coordinates: [35.6594, 139.7005],
+          category: {
+            id: "cat1",
+            label: "Category 1",
+          },
+          distance: 100,
+          price: 2,
+          link: "https://test.com",
+          rating: 9.5,
+        },
+        {
+          id: "123",
+          name: "Second Place",
+          coordinates: [35.6594, 139.7005],
+          category: {
+            id: "cat1",
+            label: "Category 1",
+          },
+          distance: 100,
+          price: 2,
+          link: "https://test.com",
+          rating: 8.5,
+        },
+      ]);
+    });
+  });
+
   describe("when rate limit exceeded", () => {
     it("should throw rate limit exceeded Error", async () => {
       (rateLimit as jest.Mock).mockReturnValue(false);

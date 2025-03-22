@@ -36,6 +36,7 @@ export async function getNearbyPlaces(
   coordinates: number[],
   categories: string[],
   query: string,
+  rate?: number,
   radius: number = 1000,
 ): Promise<Place[]> {
   log.info("Requesting places by criteria", {
@@ -43,10 +44,11 @@ export async function getNearbyPlaces(
     coordinates,
     categories,
     query,
+    rate,
     radius,
   });
   const startTime = Date.now();
-  const rateLimitKey = `places:${coordinates.join(",")}:${categories.join(",")}:${query}`;
+  const rateLimitKey = `places`;
 
   if (!rateLimit(rateLimitKey)) {
     logError(
@@ -71,6 +73,9 @@ export async function getNearbyPlaces(
     url.searchParams.set("limit", "50");
     if (query) {
       url.searchParams.set("query", query);
+    }
+    if (rate) {
+      url.searchParams.set("sort", "rating");
     }
 
     const res = await fetch(url.toString(), {
@@ -100,7 +105,9 @@ export async function getNearbyPlaces(
     logApiCall(url.toString(), "GET", res.status, duration);
 
     const places = await res.json();
-    const domainRes = await Promise.all(places.results.map(fromPlaceToDomain));
+    const domainRes = await Promise.all<Place>(
+      places.results.map(fromPlaceToDomain),
+    );
 
     logPerformance("results-count", domainRes.length, "places-api", {
       endpoint: "search",
@@ -109,7 +116,7 @@ export async function getNearbyPlaces(
       query,
     });
 
-    return domainRes;
+    return rate ? domainRes.filter(({ rating }) => rating >= rate) : domainRes;
   } catch (e) {
     const duration = Date.now() - startTime;
     logError(

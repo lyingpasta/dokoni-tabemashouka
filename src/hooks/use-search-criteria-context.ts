@@ -1,18 +1,19 @@
-import { categories, CategoryFilter } from "@/domain/value-objects/categories";
+import { filterValues } from "@/components/filter";
+import { FilterValue } from "@/components/filter/types";
 import { createContext, useContext } from "react";
 
 type SearchCriteriaContextType = {
   query: string;
   setQuery: (q: string) => void;
-  searchFilters: CategoryFilter[];
-  setSearchFilters: (f: CategoryFilter[]) => void;
+  searchFilters: FilterValue[];
+  setSearchFilters: (f: FilterValue[]) => void;
 };
 
 export const SearchCriteriaContext = createContext<SearchCriteriaContextType>({
   query: "",
   setQuery: () => {},
-  searchFilters: categories.map((category) => ({
-    ...category,
+  searchFilters: filterValues.map((filter) => ({
+    ...filter,
     isActive: false,
   })),
   setSearchFilters: () => {},
