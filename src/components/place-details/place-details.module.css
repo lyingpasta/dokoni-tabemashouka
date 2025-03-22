@@ -107,3 +107,13 @@
   flex-wrap: wrap;
   align-items: center;
 }
+
+@media(max-width: 768px) {
+  .details {
+    flex-wrap: wrap;
+  }
+
+  .info {
+    width: 100%;
+  }
+}
