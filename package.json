@@ -18,7 +18,7 @@
     "@tanstack/react-query-devtools": "^5.69.0",
     "leaflet": "^1.9.4",
     "lru-cache": "^11.0.2",
-    "next": "15.2.2",
+    "next": "15.2.3",
     "pino": "^9.6.0",
     "react": "^19.0.0-rc.1",
     "react-dom": "^19.0.0-rc.1",
